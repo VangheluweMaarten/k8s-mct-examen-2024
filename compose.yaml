@@ -1,0 +1,24 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend-server
+    image: nathansegers/k8s-2024-frontend
+    ports:
+      - "8080:8000" # Maps port 80 in the container to port 8080 on the host
+    environment:
+      BACKEND_URL: http://api-server:8000
+    restart: always
+  
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: api-server
+    image: nathansegers/k8s-2024-backend
+    ports:
+      - "8000:8000" # Maps port 8000 in the container to port 8000 on the host
+    volumes:
+      - ./api/uploaded_images:/mnt/data/uploaded_images
+    restart: always
